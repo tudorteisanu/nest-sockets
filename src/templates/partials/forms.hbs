@@ -1,0 +1,25 @@
+<form method="post" action="/make-call">
+  <h3>Existing</h3>
+  {{> operatorInput }}
+  {{> cardInput }}
+  <button>Send existing</button>
+</form>
+
+<form method="post" action="/make-call?existing=false">
+  <h3>Not Existing</h3>
+  {{> operatorInput }}
+  {{> cardInput }}
+  <button>Send not existing</button>
+</form>
+
+<form method="post" action="/operator/pause">
+  <h3>Pause operator</h3>
+  {{> operatorInput }}
+  <button>Pause operator</button>
+</form>
+
+<form method="post" action="/operator/unpause">
+  <h3>Unpause operator</h3>
+  {{> operatorInput }}
+  <button>unpause operator</button>
+</form>
