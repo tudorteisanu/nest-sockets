@@ -1,6 +1,16 @@
-import { Body, Controller, Get, Post, Query, Render } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Render,
+} from '@nestjs/common';
 import { AppService } from './app.service';
-import { ToBooleanPipe } from './to-boolean.pipe';
+import { ApiParam } from '@nestjs/swagger';
+import { NewCallDto } from './new-call.dto';
 
 @Controller()
 export class AppController {
@@ -8,32 +18,27 @@ export class AppController {
 
   @Get()
   @Render('index')
-  root() {
+  index() {
     return '';
   }
 
   @Post('make-call')
-  @Render('index')
-  sendAnonymous(
-    @Body() body,
-    @Query('existing', ToBooleanPipe)
-    existing = true,
-  ) {
-    this.appService.makeCall({ ...body, existing });
-    return { message: `Start call!, existing: ${existing}` };
+  @HttpCode(HttpStatus.OK)
+  makeCall(@Body() body: NewCallDto) {
+    return this.appService.makeCall(body);
   }
 
-  @Post('operator/pause')
-  @Render('index')
-  pauseOperator(@Body() { operator }) {
-    this.appService.pauseOperator(operator);
-    return { message: 'Paused operator!' };
+  @ApiParam({ name: 'operator', required: true })
+  @Post('operator/:operator/pause')
+  @HttpCode(HttpStatus.OK)
+  pauseOperator(@Param('operator') operator) {
+    return this.appService.pauseOperator(operator);
   }
 
-  @Post('operator/unpause')
-  @Render('index')
-  unpauseOperator(@Body() { operator }) {
-    this.appService.unpauseOperator(operator);
-    return { message: 'Unpause operator!' };
+  @ApiParam({ name: 'operator', required: true })
+  @Post('operator/:operator/unpause')
+  @HttpCode(HttpStatus.OK)
+  unpauseOperator(@Param('operator') operator) {
+    return this.appService.unpauseOperator(operator);
   }
 }

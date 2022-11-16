@@ -51,5 +51,64 @@
   </small>
 {{/if}}
 {{> forms }}
+<script>
+  const makeCallForm = document.getElementById("makeCallExistingClient");
+  const makeCallNotExistingForm = document.getElementById("makeCallNotExistingClient");
+  const pauseOperatorForm = document.getElementById("pauseForm");
+  const unpauseOperatorForm = document.getElementById("unpauseForm");
+
+  const fetchData = (url, payload) => fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(r=> {
+    console.log(r);
+    return r
+  }).catch(e=> {
+    console.log(e);
+    return e
+  })
+
+  const formDataToJson = (form) => {
+    const data = new FormData(form);
+    const payload = {}
+
+    for (const [name,value] of data) {
+      payload[name] = value
+    }
+    return payload
+  }
+
+  function makeCall(existingClient, form) {
+    return (e) => {
+      e.preventDefault();
+      const data = formDataToJson(form);
+      fetchData('/make-call', { ...data, existingClient })
+    };
+  }
+
+  function pauseOperator(form) {
+    return (e) => {
+      e.preventDefault();
+      const { operator } = formDataToJson(form);
+      fetchData(`/operator/${operator}/pause`)
+    };
+  }
+
+  function unpauseOperator(form) {
+    return (e) => {
+      e.preventDefault();
+      const { operator } = formDataToJson(form);
+      fetchData(`/operator/${operator}/unpause`)
+    };
+  }
+
+  makeCallForm.addEventListener("submit", makeCall(true, makeCallForm));
+  makeCallNotExistingForm.addEventListener("submit", makeCall(false, makeCallNotExistingForm));
+  pauseOperatorForm.addEventListener('submit', pauseOperator(pauseOperatorForm))
+  unpauseOperatorForm.addEventListener('submit', unpauseOperator(unpauseOperatorForm))
+</script>
 </body>
 </html>

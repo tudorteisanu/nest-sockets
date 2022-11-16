@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SocketGateway } from './socket.gateway';
 import { SocketEvents } from './enum';
+import { NewCallDto } from './new-call.dto';
 
 @Injectable()
 export class AppService {
@@ -8,7 +9,7 @@ export class AppService {
 
   constructor(private webSocket: SocketGateway) {}
 
-  makeCall(payload: any): any {
+  makeCall(payload: NewCallDto): any {
     this.webSocket.server.emit(SocketEvents.NewCall, payload);
     this.operators = [
       ...this.operators.filter(
@@ -20,16 +21,16 @@ export class AppService {
     return payload;
   }
 
-  pauseOperator(payload: any): any {
-    this.changeOperatorStatus(payload, true);
-    this.webSocket.server.emit(SocketEvents.PauseOperator, payload);
-    return payload;
+  pauseOperator(operator: string): any {
+    this.changeOperatorStatus(operator, true);
+    this.webSocket.server.emit(SocketEvents.PauseOperator, { operator });
+    return { operator };
   }
 
-  unpauseOperator(payload: any): any {
-    this.changeOperatorStatus(payload, false);
-    this.webSocket.server.emit(SocketEvents.UnpauseOperator, payload);
-    return payload;
+  unpauseOperator(operator: string): any {
+    this.changeOperatorStatus(operator, false);
+    this.webSocket.server.emit(SocketEvents.UnpauseOperator, { operator });
+    return { operator };
   }
 
   changeOperatorStatus(operator, busy: boolean) {

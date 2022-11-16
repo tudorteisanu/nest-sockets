@@ -1,24 +1,24 @@
-<form method="post" action="/make-call">
+<form id="makeCallExistingClient">
   <h3>Existing</h3>
   {{> operatorInput }}
   {{> cardInput }}
   <button>Send existing</button>
 </form>
 
-<form method="post" action="/make-call?existing=false">
+<form id="makeCallNotExistingClient" >
   <h3>Not Existing</h3>
   {{> operatorInput }}
   {{> cardInput }}
-  <button>Send not existing</button>
+  <button >Send not existing</button>
 </form>
 
-<form method="post" action="/operator/pause">
+<form id="pauseForm">
   <h3>Pause operator</h3>
   {{> operatorInput }}
   <button>Pause operator</button>
 </form>
 
-<form method="post" action="/operator/unpause">
+<form id="unpauseForm">
   <h3>Unpause operator</h3>
   {{> operatorInput }}
   <button>unpause operator</button>
