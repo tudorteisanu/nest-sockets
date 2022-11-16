@@ -22,10 +22,18 @@ export class AppController {
     return '';
   }
 
-  @Post('make-call')
+  @ApiParam({ name: 'card', required: true })
+  @Post('call/:card/start')
   @HttpCode(HttpStatus.OK)
-  makeCall(@Body() body: NewCallDto) {
-    return this.appService.makeCall(body);
+  makeCall(@Body() body: NewCallDto, @Param('card') card) {
+    return this.appService.makeCall(body, card);
+  }
+
+  @ApiParam({ name: 'card', required: true })
+  @Post('call/:card/end')
+  @HttpCode(HttpStatus.OK)
+  endCall(@Param('card') card) {
+    return this.appService.endCall(card);
   }
 
   @ApiParam({ name: 'operator', required: true })

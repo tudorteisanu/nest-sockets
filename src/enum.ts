@@ -4,6 +4,7 @@ export enum SocketEvents {
   Message = 'message',
   Disconnect = 'disconnect',
   NewCall = 'new-call',
+  EndCall = 'end-call',
   PauseOperator = 'pause-operator',
   UnpauseOperator = 'unpause-operator',
 }

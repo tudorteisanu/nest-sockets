@@ -9,6 +9,7 @@ export const setupApiDocs = (app: NestExpressApplication) => {
      - new-call, example payload: { "operator": 22, "card": 23, "existingClient": false }
      - pause-operator, example payload: { "operator": 22 }
      - unpause-operator, example payload: { "operator": 22 }
+     - end-call, example payload: { "card": 23 }
   `;
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Test api')

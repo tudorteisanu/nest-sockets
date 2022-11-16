@@ -56,6 +56,7 @@
   const makeCallNotExistingForm = document.getElementById("makeCallNotExistingClient");
   const pauseOperatorForm = document.getElementById("pauseForm");
   const unpauseOperatorForm = document.getElementById("unpauseForm");
+  const endCallFrom = document.getElementById("endCallFrom");
 
   const fetchData = (url, payload) => fetch(url, {
     method: 'POST',
@@ -85,7 +86,15 @@
     return (e) => {
       e.preventDefault();
       const data = formDataToJson(form);
-      fetchData('/make-call', { ...data, existingClient })
+      fetchData(`/call/${data.card}/start`, { ...data, existingClient })
+    };
+  }
+
+  function endCall(form) {
+    return (e) => {
+      e.preventDefault();
+      const { card } = formDataToJson(form);
+      fetchData(`/call/${card}/end`, {  })
     };
   }
 
@@ -109,6 +118,7 @@
   makeCallNotExistingForm.addEventListener("submit", makeCall(false, makeCallNotExistingForm));
   pauseOperatorForm.addEventListener('submit', pauseOperator(pauseOperatorForm))
   unpauseOperatorForm.addEventListener('submit', unpauseOperator(unpauseOperatorForm))
+  endCallFrom.addEventListener('submit', endCall(endCallFrom))
 </script>
 </body>
 </html>
