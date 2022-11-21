@@ -5,7 +5,11 @@ import {
 } from '@nestjs/websockets';
 import { SocketEvents } from './enum';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: '*',
+  },
+})
 export class SocketGateway {
   @WebSocketServer() server;
 
