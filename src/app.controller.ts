@@ -11,6 +11,7 @@ import {
 import { AppService } from './app.service';
 import { ApiParam } from '@nestjs/swagger';
 import { NewCallDto } from './new-call.dto';
+import { AnswerCallDto } from './answer-call.dto';
 
 @Controller()
 export class AppController {
@@ -34,6 +35,13 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   endCall(@Param('card') card) {
     return this.appService.endCall(card);
+  }
+
+  @ApiParam({ name: 'card', required: true })
+  @Post('call/:card/answer')
+  @HttpCode(HttpStatus.OK)
+  answer(@Param('card') card, @Body() payload: AnswerCallDto) {
+    return this.appService.answer({ ...payload, card });
   }
 
   @ApiParam({ name: 'operator', required: true })

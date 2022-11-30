@@ -20,6 +20,12 @@ export class AppService {
     return { card };
   }
 
+  answer(payload): any {
+    this.webSocket.server.emit(SocketEvents.Answer, payload);
+
+    return payload;
+  }
+
   pauseOperator(operator: string): any {
     this.webSocket.server.emit(SocketEvents.PauseOperator, { operator });
     return { operator };
