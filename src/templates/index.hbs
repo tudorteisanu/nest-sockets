@@ -51,13 +51,21 @@
   </small>
 {{/if}}
 {{> forms }}
-<script>
+
+<script type="module">
+  import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+  const socket = io('https://socket-node.powerit.dev');
+
   const makeCallForm = document.getElementById("makeCallExistingClient");
   const makeCallNotExistingForm = document.getElementById("makeCallNotExistingClient");
   const pauseOperatorForm = document.getElementById("pauseForm");
   const unpauseOperatorForm = document.getElementById("unpauseForm");
   const endCallFrom = document.getElementById("endCallFrom");
   const answerFrom = document.getElementById("answerForm");
+
+  const emitEvent = (eventName, payload ) => {
+    socket.emit(eventName, payload)
+  }
 
   const fetchData = (url, payload) => fetch(url, {
     method: "POST",
@@ -73,6 +81,14 @@
     return e;
   });
 
+  const events = {
+    NewCall: 'new-call',
+    EndCall: 'end-call',
+    PauseOperator: 'pause-operator',
+    UnpauseOperator: 'unpause-operator',
+    Answer: 'answer',
+  }
+
   const formDataToJson = (form) => {
     const data = new FormData(form);
     const payload = {};
@@ -87,7 +103,8 @@
     return (e) => {
       e.preventDefault();
       const data = formDataToJson(form);
-      fetchData(`/call/${data.card}/start`, { ...data, existingClient });
+      emitEvent(events.NewCall, { ...data, existingClient })
+      // fetchData(`/call/${data.card}/start`, { ...data, existingClient });
     };
   }
 
@@ -95,7 +112,9 @@
     return (e) => {
       e.preventDefault();
       const { card } = formDataToJson(form);
-      fetchData(`/call/${card}/end`, {});
+
+      emitEvent(events.EndCall, {card})
+      // fetchData(`/call/${card}/end`, {});
     };
   }
 
@@ -103,7 +122,9 @@
     return (e) => {
       e.preventDefault();
       const { operator } = formDataToJson(form);
-      fetchData(`/operator/${operator}/pause`);
+
+      emitEvent(events.PauseOperator, { operator })
+      // fetchData(`/operator/${operator}/pause`);
     };
   }
 
@@ -111,7 +132,9 @@
     return (e) => {
       e.preventDefault();
       const { operator } = formDataToJson(form);
-      fetchData(`/operator/${operator}/unpause`);
+      emitEvent(events.UnpauseOperator, { operator })
+
+      // fetchData(`/operator/${operator}/unpause`);
     };
   }
 
@@ -119,7 +142,9 @@
     return (e) => {
       e.preventDefault();
       const { operator, card } = formDataToJson(form);
-      fetchData(`/call/${card}/answer`, { operator });
+      emitEvent(events.Answer, { operator, card })
+
+      // fetchData(`/call/${card}/answer`, { operator });
     };
   }
 
